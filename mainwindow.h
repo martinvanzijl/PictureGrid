@@ -40,6 +40,12 @@ private slots:
     void fitToWindow();
     void about();
 
+    void on_doubleSpinBoxGridSpacing_valueChanged(double value);
+
+    void on_checkBoxShowGrid_toggled(bool checked);
+
+    void on_pushButtonGridColor_clicked();
+
 private:
     void createActions();
     void createMenus();
@@ -49,10 +55,15 @@ private:
     void scaleImage(double factor);
     void adjustScrollBar(QScrollBar *scrollBar, double factor);
     void drawGrid();
+    void updateGrid();
 
     Ui::MainWindow *ui;
+    QImage imageWithoutGrid;
     QImage image;
+    QLabel *imageLabel;
+    QScrollArea *scrollArea;
     double scaleFactor;
+    QColor gridColor;
 
 #ifndef QT_NO_PRINTER
     QPrinter printer;

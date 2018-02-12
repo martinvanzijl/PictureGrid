@@ -12,18 +12,24 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    scaleFactor(1)
+    imageLabel(new QLabel),
+    scrollArea(new QScrollArea),
+    scaleFactor(1),
+    gridColor(Qt::black)
 {
     ui->setupUi(this);
 
-    ui->imageLabel->setBackgroundRole(QPalette::Base);
-    ui->imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    ui->imageLabel->setScaledContents(true);
+    imageLabel->setBackgroundRole(QPalette::Base);
+    imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    imageLabel->setScaledContents(true);
 
-    ui->scrollArea->setBackgroundRole(QPalette::Dark);
-    ui->scrollArea->setWidget(ui->imageLabel);
-    ui->scrollArea->setVisible(false);
-    setCentralWidget(ui->scrollArea);
+    scrollArea->setBackgroundRole(QPalette::Dark);
+    scrollArea->setWidget(imageLabel);
+    scrollArea->setVisible(false);
+
+    ui->horizontalLayout->addWidget(scrollArea);
+
+    //setCentralWidget(scrollArea);
 
     createActions();
 
@@ -60,17 +66,18 @@ bool MainWindow::loadFile(const QString &fileName)
 void MainWindow::setImage(const QImage &newImage)
 {
     image = newImage;
+    imageWithoutGrid = newImage;
     drawGrid();
-    ui->imageLabel->setPixmap(QPixmap::fromImage(image));
+    imageLabel->setPixmap(QPixmap::fromImage(image));
     scaleFactor = 1.0;
 
-    ui->scrollArea->setVisible(true);
+    scrollArea->setVisible(true);
     ui->printAct->setEnabled(true);
     ui->fitToWindowAct->setEnabled(true);
     updateActions();
 
     if (!ui->fitToWindowAct->isChecked())
-        ui->imageLabel->adjustSize();
+        imageLabel->adjustSize();
 }
 
 bool MainWindow::saveFile(const QString &fileName)
@@ -120,17 +127,17 @@ void MainWindow::saveAs()
 
 void MainWindow::print()
 {
-    Q_ASSERT(ui->imageLabel->pixmap());
+    Q_ASSERT(imageLabel->pixmap());
 //#if QT_CONFIG(printdialog)
     QPrintDialog dialog(&printer, this);
     if (dialog.exec()) {
         QPainter painter(&printer);
         QRect rect = painter.viewport();
-        QSize size = ui->imageLabel->pixmap()->size();
+        QSize size = imageLabel->pixmap()->size();
         size.scale(rect.size(), Qt::KeepAspectRatio);
         painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
-        painter.setWindow(ui->imageLabel->pixmap()->rect());
-        painter.drawPixmap(0, 0, *ui->imageLabel->pixmap());
+        painter.setWindow(imageLabel->pixmap()->rect());
+        painter.drawPixmap(0, 0, *imageLabel->pixmap());
     }
 //#endif
 }
@@ -189,14 +196,14 @@ void MainWindow::zoomOut()
 
 void MainWindow::normalSize()
 {
-    ui->imageLabel->adjustSize();
+    imageLabel->adjustSize();
     scaleFactor = 1.0;
 }
 
 void MainWindow::fitToWindow()
 {
     bool fitToWindow = ui->fitToWindowAct->isChecked();
-    ui->scrollArea->setWidgetResizable(fitToWindow);
+    scrollArea->setWidgetResizable(fitToWindow);
     if (!fitToWindow)
         normalSize();
     updateActions();
@@ -269,12 +276,12 @@ void MainWindow::updateActions()
 
 void MainWindow::scaleImage(double factor)
 {
-    Q_ASSERT(ui->imageLabel->pixmap());
+    Q_ASSERT(imageLabel->pixmap());
     scaleFactor *= factor;
-    ui->imageLabel->resize(scaleFactor * ui->imageLabel->pixmap()->size());
+    imageLabel->resize(scaleFactor * imageLabel->pixmap()->size());
 
-    adjustScrollBar(ui->scrollArea->horizontalScrollBar(), factor);
-    adjustScrollBar(ui->scrollArea->verticalScrollBar(), factor);
+    adjustScrollBar(scrollArea->horizontalScrollBar(), factor);
+    adjustScrollBar(scrollArea->verticalScrollBar(), factor);
 
     ui->zoomInAct->setEnabled(scaleFactor < 3.0);
     ui->zoomOutAct->setEnabled(scaleFactor > 0.333);
@@ -288,15 +295,54 @@ void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
 
 void MainWindow::drawGrid()
 {
-    QPainter painter(&image);
+    int gridSpacing = (int) ui->doubleSpinBoxGridSpacing->value();
 
-    for(int x = 0; x < image.width(); x += 32)
+    QPainter painter(&image);
+    painter.setPen(gridColor);
+
+    for(int x = 0; x < image.width(); x += gridSpacing)
     {
         painter.drawLine(x, 0, x, image.height());
     }
 
-    for(int y = 0; y < image.height(); y += 32)
+    for(int y = 0; y < image.height(); y += gridSpacing)
     {
         painter.drawLine(0, y, image.width(), y);
+    }
+}
+
+void MainWindow::updateGrid()
+{
+    image = imageWithoutGrid;
+
+    if(ui->checkBoxShowGrid->isChecked())
+    {
+        drawGrid();
+    }
+
+    imageLabel->setPixmap(QPixmap::fromImage(image));
+}
+
+void MainWindow::on_doubleSpinBoxGridSpacing_valueChanged(double value)
+{
+    Q_UNUSED(value)
+
+    updateGrid();
+}
+
+void MainWindow::on_checkBoxShowGrid_toggled(bool checked)
+{
+    Q_UNUSED(checked)
+
+    updateGrid();
+}
+
+void MainWindow::on_pushButtonGridColor_clicked()
+{
+    QColor newColor = QColorDialog::getColor(gridColor);
+    if (newColor.isValid())
+    {
+        gridColor = newColor;
+        updateGrid();
     }
 }
