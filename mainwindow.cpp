@@ -294,18 +294,22 @@ void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
 }
 
 void MainWindow::drawGrid()
-{
-    int gridSpacing = (int) ui->doubleSpinBoxGridSpacing->value();
+{    
+    int cols = ui->spinBoxColumns->value();
+    int horizontalSpacing = image.width() / cols;
+
+    int rows = ui->spinBoxRows->value();
+    int verticalSpacing = image.height() / rows;
 
     QPainter painter(&image);
     painter.setPen(gridColor);
 
-    for(int x = 0; x < image.width(); x += gridSpacing)
+    for(int x = 0; x < image.width(); x += horizontalSpacing)
     {
         painter.drawLine(x, 0, x, image.height());
     }
 
-    for(int y = 0; y < image.height(); y += gridSpacing)
+    for(int y = 0; y < image.height(); y += verticalSpacing)
     {
         painter.drawLine(0, y, image.width(), y);
     }
@@ -345,4 +349,16 @@ void MainWindow::on_pushButtonGridColor_clicked()
         gridColor = newColor;
         updateGrid();
     }
+}
+
+void MainWindow::on_spinBoxRows_valueChanged(int value)
+{
+    Q_UNUSED(value)
+    updateGrid();
+}
+
+void MainWindow::on_spinBoxColumns_valueChanged(int value)
+{
+    Q_UNUSED(value)
+    updateGrid();
 }

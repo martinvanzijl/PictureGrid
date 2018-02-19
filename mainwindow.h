@@ -46,6 +46,10 @@ private slots:
 
     void on_pushButtonGridColor_clicked();
 
+    void on_spinBoxRows_valueChanged(int value);
+
+    void on_spinBoxColumns_valueChanged(int value);
+
 private:
     void createActions();
     void createMenus();
