@@ -15,6 +15,8 @@ class QScrollArea;
 class QScrollBar;
 QT_END_NAMESPACE
 
+#include "imagelabel.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -64,14 +66,21 @@ private:
     Ui::MainWindow *ui;
     QImage imageWithoutGrid;
     QImage image;
-    QLabel *imageLabel;
+    ImageLabel *imageLabel;
     QScrollArea *scrollArea;
     double scaleFactor;
     QColor gridColor;
+    QPoint gridClickedPos;
+    QPoint gridOffset;
 
 #ifndef QT_NO_PRINTER
     QPrinter printer;
 #endif
+
+private slots:
+    void onLabelMousePress(QMouseEvent *ev);
+    void onLabelMouseMove(QMouseEvent *ev);
+    void onLabelMouseDoubleClick(QMouseEvent *ev);
 };
 
 #endif // MAINWINDOW_H

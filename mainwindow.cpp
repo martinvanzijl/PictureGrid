@@ -12,7 +12,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    imageLabel(new QLabel),
+    imageLabel(new ImageLabel),
     scrollArea(new QScrollArea),
     scaleFactor(1),
     gridColor(Qt::black)
@@ -263,6 +263,10 @@ void MainWindow::createActions()
 
     connect(ui->aboutAct, &QAction::triggered, this, &MainWindow::about);
     connect(ui->aboutQtAct, &QAction::triggered, this, &QApplication::aboutQt);
+
+    connect(imageLabel, &ImageLabel::onMousePressEvent, this, &MainWindow::onLabelMousePress);
+    connect(imageLabel, &ImageLabel::onMouseMoveEvent, this, &MainWindow::onLabelMouseMove);
+    connect(imageLabel, &ImageLabel::onMouseDoubleClickEvent, this, &MainWindow::onLabelMouseDoubleClick);
 }
 
 void MainWindow::updateActions()
@@ -304,12 +308,12 @@ void MainWindow::drawGrid()
     QPainter painter(&image);
     painter.setPen(gridColor);
 
-    for(int x = 0; x < image.width(); x += horizontalSpacing)
+    for(int x = gridOffset.x(); x < image.width(); x += horizontalSpacing)
     {
         painter.drawLine(x, 0, x, image.height());
     }
 
-    for(int y = 0; y < image.height(); y += verticalSpacing)
+    for(int y = gridOffset.y(); y < image.height(); y += verticalSpacing)
     {
         painter.drawLine(0, y, image.width(), y);
     }
@@ -325,6 +329,31 @@ void MainWindow::updateGrid()
     }
 
     imageLabel->setPixmap(QPixmap::fromImage(image));
+}
+
+void MainWindow::onLabelMousePress(QMouseEvent *ev)
+{
+    gridClickedPos = ev->pos();
+}
+
+void MainWindow::onLabelMouseMove(QMouseEvent *ev)
+{
+    QPoint moveAmount = ev->pos() - gridClickedPos;
+    gridOffset += moveAmount;
+    gridClickedPos = ev->pos();
+
+    updateGrid();
+}
+
+void MainWindow::onLabelMouseDoubleClick(QMouseEvent *ev)
+{
+    Q_UNUSED(ev)
+
+    // Reset offset.
+    gridOffset.setX(0);
+    gridOffset.setY(0);
+
+    updateGrid();
 }
 
 void MainWindow::on_doubleSpinBoxGridSpacing_valueChanged(double value)
