@@ -6,7 +6,7 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    QGuiApplication::setApplicationDisplayName(ImageViewer::tr("Image Viewer"));
+    QGuiApplication::setApplicationDisplayName(ImageViewer::tr("PictureGrid"));
     QCommandLineParser commandLineParser;
     commandLineParser.addHelpOption();
     commandLineParser.addPositionalArgument(ImageViewer::tr("[file]"), ImageViewer::tr("Image file to open."));
