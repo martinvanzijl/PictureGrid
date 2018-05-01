@@ -305,8 +305,13 @@ void MainWindow::drawGrid()
     int rows = ui->spinBoxRows->value();
     int verticalSpacing = image.height() / rows;
 
+    int lineWidth = ui->spinBoxLineWidth->value();
+
+    QPen pen(gridColor);
+    pen.setWidth(lineWidth);
+
     QPainter painter(&image);
-    painter.setPen(gridColor);
+    painter.setPen(pen);
 
     for(int x = gridOffset.x(); x < image.width(); x += horizontalSpacing)
     {
@@ -387,6 +392,12 @@ void MainWindow::on_spinBoxRows_valueChanged(int value)
 }
 
 void MainWindow::on_spinBoxColumns_valueChanged(int value)
+{
+    Q_UNUSED(value)
+    updateGrid();
+}
+
+void MainWindow::on_spinBoxLineWidth_valueChanged(int value)
 {
     Q_UNUSED(value)
     updateGrid();

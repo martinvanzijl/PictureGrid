@@ -81,6 +81,7 @@ private slots:
     void onLabelMousePress(QMouseEvent *ev);
     void onLabelMouseMove(QMouseEvent *ev);
     void onLabelMouseDoubleClick(QMouseEvent *ev);
+    void on_spinBoxLineWidth_valueChanged(int value);
 };
 
 #endif // MAINWINDOW_H
