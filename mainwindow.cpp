@@ -8,6 +8,27 @@
 #include <QPrintDialog>
 //#endif
 #endif
+#include <QUndoStack>
+
+class MoveGridCommand: public QUndoCommand
+{
+public:
+    MoveGridCommand(Grid * grid, QPoint offsetBefore, QPoint offsetAfter)
+        : m_grid(grid),
+          m_offsetBefore(offsetBefore),
+          m_offsetAfter(offsetAfter)
+    {
+        setText("move grid");
+    }
+    virtual void undo()
+        { m_grid->setOffset(m_offsetBefore); }
+    virtual void redo()
+        { m_grid->setOffset(m_offsetAfter); }
+private:
+    Grid * m_grid;
+    QPoint m_offsetBefore;
+    QPoint m_offsetAfter;
+};
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -34,6 +55,11 @@ MainWindow::MainWindow(QWidget *parent) :
     createActions();
 
     resize(QGuiApplication::primaryScreen()->availableSize() * 3 / 5);
+
+    undoStack = new QUndoStack(this);
+    ui->menuEdit->addSeparator();
+    ui->menuEdit->addAction(undoStack->createUndoAction(this));
+    ui->menuEdit->addAction(undoStack->createRedoAction(this));
 }
 
 MainWindow::~MainWindow()
@@ -256,7 +282,10 @@ void MainWindow::createActions()
 
     connect(imageLabel, &ImageLabel::onMousePressEvent, this, &MainWindow::onLabelMousePress);
     connect(imageLabel, &ImageLabel::onMouseMoveEvent, this, &MainWindow::onLabelMouseMove);
+    connect(imageLabel, &ImageLabel::onMouseReleaseEvent, this, &MainWindow::onLabelMouseRelease);
     connect(imageLabel, &ImageLabel::onMouseDoubleClickEvent, this, &MainWindow::onLabelMouseDoubleClick);
+
+    connect(&m_grid, &Grid::offsetUpdated, this, &MainWindow::offsetUpdated);
 }
 
 void MainWindow::updateActions()
@@ -329,6 +358,7 @@ void MainWindow::updateGrid()
 void MainWindow::onLabelMousePress(QMouseEvent *ev)
 {
     gridClickedPos = ev->pos();
+    offsetOriginal = gridOffset;
 }
 
 void MainWindow::onLabelMouseMove(QMouseEvent *ev)
@@ -338,6 +368,12 @@ void MainWindow::onLabelMouseMove(QMouseEvent *ev)
     gridClickedPos = ev->pos();
 
     updateGrid();
+}
+
+void MainWindow::onLabelMouseRelease(QMouseEvent *ev)
+{
+    auto command = new MoveGridCommand(&m_grid, offsetOriginal, gridOffset);
+    undoStack->push(command);
 }
 
 void MainWindow::onLabelMouseDoubleClick(QMouseEvent *ev)
@@ -390,5 +426,11 @@ void MainWindow::on_spinBoxColumns_valueChanged(int value)
 void MainWindow::on_spinBoxLineWidth_valueChanged(int value)
 {
     Q_UNUSED(value)
+    updateGrid();
+}
+
+void MainWindow::offsetUpdated(QPoint offset)
+{
+    gridOffset = offset;
     updateGrid();
 }

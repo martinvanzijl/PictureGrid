@@ -13,6 +13,7 @@ class QLabel;
 class QMenu;
 class QScrollArea;
 class QScrollBar;
+class QUndoStack;
 QT_END_NAMESPACE
 
 #include "imagelabel.h"
@@ -20,6 +21,25 @@ QT_END_NAMESPACE
 namespace Ui {
 class MainWindow;
 }
+
+class Grid : public QObject
+{
+    Q_OBJECT
+
+public:
+    QPoint offset() const { return m_offset; }
+    void setOffset(QPoint offset)
+    {
+        m_offset = offset;
+        emit offsetUpdated(m_offset);
+    }
+
+signals:
+    void offsetUpdated(QPoint offset);
+
+private:
+    QPoint m_offset;
+};
 
 class MainWindow : public QMainWindow
 {
@@ -72,6 +92,9 @@ private:
     QColor gridColor;
     QPoint gridClickedPos;
     QPoint gridOffset;
+    QPoint offsetOriginal;
+    QUndoStack *undoStack;
+    Grid m_grid;
 
 #ifndef QT_NO_PRINTER
     QPrinter printer;
@@ -80,8 +103,10 @@ private:
 private slots:
     void onLabelMousePress(QMouseEvent *ev);
     void onLabelMouseMove(QMouseEvent *ev);
+    void onLabelMouseRelease(QMouseEvent *ev);
     void onLabelMouseDoubleClick(QMouseEvent *ev);
     void on_spinBoxLineWidth_valueChanged(int value);
+    void offsetUpdated(QPoint offset);
 };
 
 #endif // MAINWINDOW_H
