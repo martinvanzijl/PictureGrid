@@ -82,6 +82,7 @@ private:
     void adjustScrollBar(QScrollBar *scrollBar, double factor);
     void drawGrid();
     void updateGrid();
+    void updateColorButtonIcon();
 
     Ui::MainWindow *ui;
     QImage imageWithoutGrid;

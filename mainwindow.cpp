@@ -60,6 +60,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->menuEdit->addSeparator();
     ui->menuEdit->addAction(undoStack->createUndoAction(this));
     ui->menuEdit->addAction(undoStack->createRedoAction(this));
+
+    updateColorButtonIcon();
 }
 
 MainWindow::~MainWindow()
@@ -355,6 +357,15 @@ void MainWindow::updateGrid()
     imageLabel->setPixmap(QPixmap::fromImage(image));
 }
 
+void MainWindow::updateColorButtonIcon()
+{
+    QPixmap iconPixmap(16, 16);
+    iconPixmap.fill(gridColor);
+    QIcon icon(iconPixmap);
+    ui->pushButtonGridColor->setIcon(icon);
+    ui->pushButtonGridColor->setText("");
+}
+
 void MainWindow::onLabelMousePress(QMouseEvent *ev)
 {
     gridClickedPos = ev->pos();
@@ -408,6 +419,7 @@ void MainWindow::on_pushButtonGridColor_clicked()
     {
         gridColor = newColor;
         updateGrid();
+        updateColorButtonIcon();
     }
 }
 
