@@ -238,8 +238,8 @@ void MainWindow::fitToWindow()
 void MainWindow::about()
 {
     QMessageBox::about(this, tr("About PictureGrid"),
-            tr("<p>PictureGrid is a simple application which draws a grid "
-               "over a picture.</p>"));
+            tr("<p>PictureGrid is an application that lets you add a grid to a picture.</p>"
+               "<p>It is open-source and made using the Qt Framework.</p>"));
 }
 
 void MainWindow::createActions()
