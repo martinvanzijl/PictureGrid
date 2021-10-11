@@ -403,7 +403,7 @@ void MainWindow::on_checkBoxShowGrid_toggled(bool checked)
 
 void MainWindow::on_pushButtonGridColor_clicked()
 {
-    QColor newColor = QColorDialog::getColor(gridColor);
+    QColor newColor = QColorDialog::getColor(gridColor, this, "Select Grid Color");
     if (newColor.isValid())
     {
         gridColor = newColor;
