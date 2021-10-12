@@ -236,6 +236,7 @@ void MainWindow::paste()
         const QString message = tr("Obtained image from clipboard, %1x%2, Depth: %3")
             .arg(newImage.width()).arg(newImage.height()).arg(newImage.depth());
         statusBar()->showMessage(message);
+        setWindowTitle("Pasted image - PictureGrid");
     }
 #endif // !QT_NO_CLIPBOARD
 }
