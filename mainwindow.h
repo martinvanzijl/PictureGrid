@@ -118,6 +118,7 @@ private slots:
     void onLabelMouseMove(QMouseEvent *ev);
     void onLabelMouseRelease(QMouseEvent *ev);
     void onLabelMouseDoubleClick(QMouseEvent *ev);
+    void onLabelWheelEvent(QWheelEvent *ev);
     void on_spinBoxLineWidth_valueChanged(int value);
     void offsetUpdated(QPoint offset);
 };

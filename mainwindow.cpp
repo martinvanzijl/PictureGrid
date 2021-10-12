@@ -310,6 +310,7 @@ void MainWindow::createActions()
     connect(imageLabel, &ImageLabel::onMouseMoveEvent, this, &MainWindow::onLabelMouseMove);
     connect(imageLabel, &ImageLabel::onMouseReleaseEvent, this, &MainWindow::onLabelMouseRelease);
     connect(imageLabel, &ImageLabel::onMouseDoubleClickEvent, this, &MainWindow::onLabelMouseDoubleClick);
+    connect(imageLabel, &ImageLabel::onWheelEvent, this, &MainWindow::onLabelWheelEvent);
 
     connect(&m_grid, &Grid::offsetUpdated, this, &MainWindow::offsetUpdated);
 }
@@ -422,6 +423,25 @@ void MainWindow::onLabelMouseDoubleClick(QMouseEvent *ev)
     gridOffset.setY(0);
 
     updateGrid();
+}
+
+void MainWindow::onLabelWheelEvent(QWheelEvent *ev)
+{
+    if (ev->modifiers() == Qt::ControlModifier)
+    {
+        QPoint numDegrees = ev->angleDelta() / 8;
+
+        if (!numDegrees.isNull()) {
+            if (numDegrees.y() > 0) {
+                zoomIn();
+            }
+            else {
+                zoomOut();
+            }
+        }
+
+        ev->accept();
+    }
 }
 
 void MainWindow::on_doubleSpinBoxGridSpacing_valueChanged(double value)

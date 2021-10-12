@@ -32,3 +32,8 @@ void ImageLabel::mouseDoubleClickEvent(QMouseEvent *ev)
 
     emit onMouseDoubleClickEvent(ev);
 }
+
+void ImageLabel::wheelEvent(QWheelEvent *ev)
+{
+    emit onWheelEvent(ev);
+}
