@@ -15,11 +15,9 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp\
-	imageviewer.cpp \
     imagelabel.cpp
 
 HEADERS  += mainwindow.h\
-	imageviewer.h \
     imagelabel.h
 
 FORMS    += mainwindow.ui
