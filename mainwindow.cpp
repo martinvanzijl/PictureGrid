@@ -430,19 +430,18 @@ void MainWindow::onLabelMouseRelease(QMouseEvent *ev)
 {
     Q_UNUSED(ev);
 
-    auto command = new MoveGridCommand(&m_grid, offsetOriginal, gridOffset);
-    undoStack->push(command);
+    if (offsetOriginal != gridOffset)
+    {
+        auto command = new MoveGridCommand(&m_grid, offsetOriginal, gridOffset);
+        undoStack->push(command);
+    }
 }
 
 void MainWindow::onLabelMouseDoubleClick(QMouseEvent *ev)
 {
     Q_UNUSED(ev)
 
-    // Reset offset.
-    gridOffset.setX(0);
-    gridOffset.setY(0);
-
-    updateGrid();
+    centerGrid();
 }
 
 void MainWindow::onLabelWheelEvent(QWheelEvent *ev)
@@ -560,6 +559,29 @@ void MainWindow::setRecentFilesVisible(bool visible)
     recentFileSeparator->setVisible(visible);
 }
 
+void MainWindow::centerGrid()
+{
+    // Store original offset.
+    offsetOriginal = gridOffset;
+
+    // Reset offset.
+    gridOffset.setX(0);
+    gridOffset.setY(0);
+
+    // Handle undo stack.
+    if (offsetOriginal != gridOffset)
+    {
+        auto command = new MoveGridCommand(&m_grid, offsetOriginal, gridOffset);
+        undoStack->push(command);
+    }
+
+    // Update display.
+    updateGrid();
+
+    // Prevent adding second undo item.
+    offsetOriginal = gridOffset;
+}
+
 void MainWindow::updateRecentFileActions()
 {
     QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
@@ -581,4 +603,9 @@ void MainWindow::openRecentFile()
 {
     if (const QAction *action = qobject_cast<const QAction *>(sender()))
         loadFile(action->data().toString());
+}
+
+void MainWindow::on_actionCenterGrid_triggered()
+{
+    centerGrid();
 }

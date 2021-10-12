@@ -87,6 +87,7 @@ private:
     static bool hasRecentFiles();
     void prependToRecentFiles(const QString &fileName);
     void setRecentFilesVisible(bool visible);
+    void centerGrid();
 
     Ui::MainWindow *ui;
     QImage imageWithoutGrid;
@@ -119,6 +120,7 @@ private slots:
     void onLabelWheelEvent(QWheelEvent *ev);
     void on_spinBoxLineWidth_valueChanged(int value);
     void offsetUpdated(QPoint offset);
+    void on_actionCenterGrid_triggered();
 };
 
 #endif // MAINWINDOW_H

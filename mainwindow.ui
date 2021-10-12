@@ -183,9 +183,16 @@
     <addaction name="aboutAct"/>
     <addaction name="aboutQtAct"/>
    </widget>
+   <widget class="QMenu" name="menuGrid">
+    <property name="title">
+     <string>&amp;Grid</string>
+    </property>
+    <addaction name="actionCenterGrid"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
+   <addaction name="menuGrid"/>
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -211,6 +218,8 @@
    <addaction name="zoomOutAct"/>
    <addaction name="normalSizeAct"/>
    <addaction name="fitToWindowAct"/>
+   <addaction name="separator"/>
+   <addaction name="actionCenterGrid"/>
   </widget>
   <action name="openAct">
    <property name="icon">
@@ -384,6 +393,18 @@
    </property>
    <property name="iconVisibleInMenu">
     <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionCenterGrid">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/root/images/center-grid.svg</normaloff>:/root/images/center-grid.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Center Grid</string>
+   </property>
+   <property name="shortcut">
+    <string>Home</string>
    </property>
   </action>
  </widget>
