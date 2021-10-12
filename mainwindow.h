@@ -83,6 +83,11 @@ private:
     void drawGrid();
     void updateGrid();
     void updateColorButtonIcon();
+    void updateRecentFileActions();
+    void openRecentFile();
+    static bool hasRecentFiles();
+    void prependToRecentFiles(const QString &fileName);
+    void setRecentFilesVisible(bool visible);
 
     Ui::MainWindow *ui;
     QImage imageWithoutGrid;
@@ -100,6 +105,12 @@ private:
 #ifndef QT_NO_PRINTER
     QPrinter printer;
 #endif
+
+    enum { MaxRecentFiles = 5 };
+
+    QAction *recentFileActs[MaxRecentFiles];
+    QAction *recentFileSeparator;
+    QAction *recentFileSubMenuAct;
 
 private slots:
     void onLabelMousePress(QMouseEvent *ev);

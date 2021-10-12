@@ -156,6 +156,7 @@
     <addaction name="saveAsAct"/>
     <addaction name="separator"/>
     <addaction name="printAct"/>
+    <addaction name="separator"/>
     <addaction name="exitAct"/>
    </widget>
    <widget class="QMenu" name="menuView">
