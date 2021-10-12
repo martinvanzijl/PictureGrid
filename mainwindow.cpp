@@ -419,7 +419,8 @@ void MainWindow::onLabelMousePress(QMouseEvent *ev)
 void MainWindow::onLabelMouseMove(QMouseEvent *ev)
 {
     QPoint moveAmount = ev->pos() - gridClickedPos;
-    gridOffset += moveAmount;
+    double factor = 1.0 / scaleFactor;
+    gridOffset += moveAmount * factor;
     gridClickedPos = ev->pos();
 
     updateGrid();
