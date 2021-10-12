@@ -368,7 +368,7 @@ void MainWindow::drawGrid()
 //        painter.drawLine(x, 0, x, image.height());
 //    }
 
-    for(int col = 0; col < cols; ++col)
+    for(int col = 0; col <= cols; ++col)
     {
         double fraction = static_cast<double> (col) / static_cast<double> (cols);
         int x = gridOffset.x() + (image.width() * fraction);
@@ -380,7 +380,7 @@ void MainWindow::drawGrid()
 //        painter.drawLine(0, y, image.width(), y);
 //    }
 
-    for(int row = 0; row < rows; ++row)
+    for(int row = 0; row <= rows; ++row)
     {
         double fraction = static_cast<double> (row) / static_cast<double> (rows);
         int y = gridOffset.y() + (image.height() * fraction);
