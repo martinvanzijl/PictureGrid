@@ -49,6 +49,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     bool loadFile(const QString &);
+    void centerOnScreen();
 
 private slots:
     void open();

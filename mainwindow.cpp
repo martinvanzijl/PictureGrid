@@ -9,6 +9,7 @@
 //#endif
 #endif
 #include <QUndoStack>
+#include <QDesktopWidget>
 
 class MoveGridCommand: public QUndoCommand
 {
@@ -107,6 +108,13 @@ bool MainWindow::loadFile(const QString &fileName)
     prependToRecentFiles(fileName);
 
     return true;
+}
+
+void MainWindow::centerOnScreen()
+{
+    QRect screenRect = QApplication::desktop()->screenGeometry();
+    QPoint offset(width() / 2, height() / 2);
+    move(screenRect.center() - offset);
 }
 
 void MainWindow::setImage(const QImage &newImage)
