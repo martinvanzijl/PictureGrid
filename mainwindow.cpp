@@ -107,6 +107,10 @@ bool MainWindow::loadFile(const QString &fileName)
 
     prependToRecentFiles(fileName);
 
+    // Update window title.
+    QFileInfo info(fileName);
+    setWindowTitle(info.fileName() + " - PictureGrid");
+
     return true;
 }
 
