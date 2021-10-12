@@ -462,13 +462,6 @@ void MainWindow::onLabelWheelEvent(QWheelEvent *ev)
     }
 }
 
-void MainWindow::on_doubleSpinBoxGridSpacing_valueChanged(double value)
-{
-    Q_UNUSED(value)
-
-    updateGrid();
-}
-
 void MainWindow::on_checkBoxShowGrid_toggled(bool checked)
 {
     Q_UNUSED(checked)

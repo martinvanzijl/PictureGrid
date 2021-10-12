@@ -63,8 +63,6 @@ private slots:
     void fitToWindow();
     void about();
 
-    void on_doubleSpinBoxGridSpacing_valueChanged(double value);
-
     void on_checkBoxShowGrid_toggled(bool checked);
 
     void on_pushButtonGridColor_clicked();
