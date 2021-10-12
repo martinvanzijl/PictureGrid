@@ -346,10 +346,10 @@ void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
 void MainWindow::drawGrid()
 {    
     int cols = ui->spinBoxColumns->value();
-    int horizontalSpacing = image.width() / cols;
+//    int horizontalSpacing = image.width() / cols;
 
     int rows = ui->spinBoxRows->value();
-    int verticalSpacing = image.height() / rows;
+//    int verticalSpacing = image.height() / rows;
 
     int lineWidth = ui->spinBoxLineWidth->value();
 
@@ -359,13 +359,27 @@ void MainWindow::drawGrid()
     QPainter painter(&image);
     painter.setPen(pen);
 
-    for(int x = gridOffset.x(); x < image.width(); x += horizontalSpacing)
+//    for(int x = gridOffset.x(); x < image.width(); x += horizontalSpacing)
+//    {
+//        painter.drawLine(x, 0, x, image.height());
+//    }
+
+    for(int col = 0; col < cols; ++col)
     {
+        double fraction = static_cast<double> (col) / static_cast<double> (cols);
+        int x = gridOffset.x() + (image.width() * fraction);
         painter.drawLine(x, 0, x, image.height());
     }
 
-    for(int y = gridOffset.y(); y < image.height(); y += verticalSpacing)
+//    for(int y = gridOffset.y(); y < image.height(); y += verticalSpacing)
+//    {
+//        painter.drawLine(0, y, image.width(), y);
+//    }
+
+    for(int row = 0; row < rows; ++row)
     {
+        double fraction = static_cast<double> (row) / static_cast<double> (rows);
+        int y = gridOffset.y() + (image.height() * fraction);
         painter.drawLine(0, y, image.width(), y);
     }
 }
