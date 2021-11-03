@@ -129,6 +129,7 @@ private slots:
     void on_spinBoxLineWidth_valueChanged(int value);
     void offsetUpdated(QPoint offset);
     void on_actionCenterGrid_triggered();
+    void onLabelOpenClick();
 };
 
 #endif // MAINWINDOW_H

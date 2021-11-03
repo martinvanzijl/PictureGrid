@@ -48,6 +48,9 @@ MainWindow::MainWindow(QWidget *parent) :
     imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     imageLabel->setScaledContents(true);
 
+    // Set initial caption.
+    //imageLabel->setText("Click here to open an image");
+
     scrollArea->setBackgroundRole(QPalette::Dark);
     scrollArea->setWidget(imageLabel);
     scrollArea->setVisible(false);
@@ -100,6 +103,9 @@ MainWindow::MainWindow(QWidget *parent) :
     sceneScaleCombo->setEnabled(false);
     ui->toolBarMain->addSeparator();
     ui->toolBarMain->addWidget(sceneScaleCombo);
+
+    // Connect the "click to open" label.
+    connect(ui->labelClickToOpen, SIGNAL(clicked()), this, SLOT(onLabelOpenClick()));
 }
 
 MainWindow::~MainWindow()
@@ -145,6 +151,9 @@ void MainWindow::centerOnScreen()
 
 void MainWindow::setImage(const QImage &newImage)
 {
+    // Remove the initial panel.
+    ui->horizontalLayout->removeWidget(ui->framePicture);
+
     image = newImage;
     imageWithoutGrid = newImage;
     drawGrid();
@@ -681,4 +690,9 @@ void MainWindow::openRecentFile()
 void MainWindow::on_actionCenterGrid_triggered()
 {
     centerGrid();
+}
+
+void MainWindow::onLabelOpenClick()
+{
+    open();
 }
