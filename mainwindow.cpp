@@ -11,6 +11,8 @@
 #include <QUndoStack>
 #include <QDesktopWidget>
 
+#include "percentvalidator.h"
+
 class MoveGridCommand: public QUndoCommand
 {
 public:
@@ -37,7 +39,8 @@ MainWindow::MainWindow(QWidget *parent) :
     imageLabel(new ImageLabel),
     scrollArea(new QScrollArea),
     scaleFactor(1),
-    gridColor(Qt::black)
+    gridColor(Qt::black),
+    scaleTextEditedByUser(false)
 {
     ui->setupUi(this);
 
@@ -78,6 +81,25 @@ MainWindow::MainWindow(QWidget *parent) :
     recentFileSeparator = ui->menuFile->insertSeparator(ui->exitAct);
 
     setRecentFilesVisible(hasRecentFiles());
+
+    // Create "Zoom" combo-box.
+    sceneScaleCombo = new QComboBox;
+    QStringList scales;
+    scales << tr("50%") << tr("75%") << tr("100%") << tr("125%") << tr("150%");
+    sceneScaleCombo->addItems(scales);
+    sceneScaleCombo->setCurrentIndex(2);
+    connect(sceneScaleCombo, SIGNAL(activated(QString)),
+            this, SLOT(sceneScaleActivated(QString)));
+    sceneScaleCombo->setEditable(true);
+    sceneScaleCombo->setValidator(new PercentValidator(33, 333, this));
+    sceneScaleCombo->setInsertPolicy(QComboBox::NoInsert);
+    connect(sceneScaleCombo->lineEdit(), SIGNAL(editingFinished()),
+            this, SLOT(sceneScaleEditingFinished()));
+    connect(sceneScaleCombo->lineEdit(), SIGNAL(textEdited(QString)),
+            this, SLOT(sceneScaleTextEdited(QString)));
+    sceneScaleCombo->setEnabled(false);
+    ui->toolBarMain->addSeparator();
+    ui->toolBarMain->addWidget(sceneScaleCombo);
 }
 
 MainWindow::~MainWindow()
@@ -264,6 +286,7 @@ void MainWindow::fitToWindow()
     if (!fitToWindow)
         normalSize();
     updateActions();
+    updateZoomComboBoxText();
 }
 
 void MainWindow::about()
@@ -271,6 +294,38 @@ void MainWindow::about()
     QMessageBox::about(this, tr("About PictureGrid"),
             tr("<p>PictureGrid is an application that lets you add a grid to a picture.</p>"
                "<p>It is open-source and made using the Qt Framework.</p>"));
+}
+
+void MainWindow::sceneScaleActivated(const QString &scale)
+{
+    Q_ASSERT(imageLabel->pixmap());
+
+    double newScale = scale.left(scale.indexOf(tr("%"))).toDouble() / 100.0;
+    double scrollBarFactor = scaleFactor / newScale;
+    scaleFactor = newScale;
+
+    imageLabel->resize(newScale * imageLabel->pixmap()->size());
+
+    adjustScrollBar(scrollArea->horizontalScrollBar(), scrollBarFactor);
+    adjustScrollBar(scrollArea->verticalScrollBar(), scrollBarFactor);
+
+    ui->zoomInAct->setEnabled(scaleFactor < 3.0);
+    ui->zoomOutAct->setEnabled(scaleFactor > 0.333);
+}
+
+void MainWindow::sceneScaleEditingFinished()
+{
+    if (scaleTextEditedByUser) {
+        sceneScaleActivated(sceneScaleCombo->currentText());
+    }
+    scaleTextEditedByUser = false;
+}
+
+void MainWindow::sceneScaleTextEdited(const QString &scale)
+{
+    Q_UNUSED(scale);
+
+    scaleTextEditedByUser = true;
 }
 
 void MainWindow::createActions()
@@ -327,6 +382,7 @@ void MainWindow::updateActions()
     ui->zoomInAct->setEnabled(!ui->fitToWindowAct->isChecked());
     ui->zoomOutAct->setEnabled(!ui->fitToWindowAct->isChecked());
     ui->normalSizeAct->setEnabled(!ui->fitToWindowAct->isChecked());
+    sceneScaleCombo->setEnabled(!ui->fitToWindowAct->isChecked());
 }
 
 void MainWindow::scaleImage(double factor)
@@ -340,6 +396,9 @@ void MainWindow::scaleImage(double factor)
 
     ui->zoomInAct->setEnabled(scaleFactor < 3.0);
     ui->zoomOutAct->setEnabled(scaleFactor > 0.333);
+
+    // Update zoom combo-box.
+    updateZoomComboBoxText();
 }
 
 void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
@@ -446,6 +505,12 @@ void MainWindow::onLabelMouseDoubleClick(QMouseEvent *ev)
 
 void MainWindow::onLabelWheelEvent(QWheelEvent *ev)
 {
+    // Exit if "fit to window" is enabled.
+    if (ui->fitToWindowAct->isChecked()) {
+        return;
+    }
+
+    // Use Ctrl+Mouse Wheel to zoom.
     if (ev->modifiers() == Qt::ControlModifier)
     {
         QPoint numDegrees = ev->angleDelta() / 8;
@@ -580,6 +645,14 @@ void MainWindow::centerGrid()
 
     // Prevent adding second undo item.
     offsetOriginal = gridOffset;
+}
+
+void MainWindow::updateZoomComboBoxText()
+{
+    // Show the current zoom level in the combo-box.
+    double percent = scaleFactor * 100.0;
+    QString text = QString::number((int)percent) + "%";
+    sceneScaleCombo->setCurrentText(text);
 }
 
 void MainWindow::updateRecentFileActions()

@@ -15,10 +15,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp\
-    imagelabel.cpp
+    imagelabel.cpp \
+    percentvalidator.cpp
 
 HEADERS  += mainwindow.h\
-    imagelabel.h
+    imagelabel.h \
+    percentvalidator.h
 
 FORMS    += mainwindow.ui
 

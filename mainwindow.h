@@ -9,6 +9,7 @@
 
 QT_BEGIN_NAMESPACE
 class QAction;
+class QComboBox;
 class QLabel;
 class QMenu;
 class QScrollArea;
@@ -62,6 +63,9 @@ private slots:
     void normalSize();
     void fitToWindow();
     void about();
+    void sceneScaleActivated(const QString &scale);
+    void sceneScaleEditingFinished();
+    void sceneScaleTextEdited(const QString &scale);
 
     void on_checkBoxShowGrid_toggled(bool checked);
 
@@ -88,6 +92,7 @@ private:
     void prependToRecentFiles(const QString &fileName);
     void setRecentFilesVisible(bool visible);
     void centerGrid();
+    void updateZoomComboBoxText();
 
     Ui::MainWindow *ui;
     QImage imageWithoutGrid;
@@ -111,6 +116,9 @@ private:
     QAction *recentFileActs[MaxRecentFiles];
     QAction *recentFileSeparator;
     QAction *recentFileSubMenuAct;
+
+    QComboBox *sceneScaleCombo;
+    bool scaleTextEditedByUser;
 
 private slots:
     void onLabelMousePress(QMouseEvent *ev);
