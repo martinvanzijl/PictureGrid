@@ -462,7 +462,7 @@ void MainWindow::updateGrid()
 
 void MainWindow::updateColorButtonIcon()
 {
-    QPixmap iconPixmap(16, 16);
+    QPixmap iconPixmap(12, 12);
     iconPixmap.fill(gridColor);
     QIcon icon(iconPixmap);
     ui->pushButtonGridColor->setIcon(icon);
