@@ -2,6 +2,7 @@
 //#include "imageviewer.h"
 #include <QApplication>
 #include <QCommandLineParser>
+#include <QSettings>
 
 int main(int argc, char *argv[])
 {
@@ -11,6 +12,11 @@ int main(int argc, char *argv[])
     commandLineParser.addHelpOption();
     commandLineParser.addPositionalArgument(MainWindow::tr("[file]"), MainWindow::tr("Image file to open."));
     commandLineParser.process(QCoreApplication::arguments());
+
+    // Specify settings.
+    QCoreApplication::setOrganizationName("Martin van Zijl");
+    QCoreApplication::setOrganizationDomain("martinvz.com");
+    QCoreApplication::setApplicationName("PictureGrid");
 
     //ImageViewer imageViewer;
     MainWindow imageViewer;
