@@ -10,6 +10,7 @@
 QT_BEGIN_NAMESPACE
 class QAction;
 class QComboBox;
+class ImageScrollArea;
 class QLabel;
 class QMenu;
 class QScrollArea;
@@ -98,7 +99,7 @@ private:
     QImage imageWithoutGrid;
     QImage image;
     ImageLabel *imageLabel;
-    QScrollArea *scrollArea;
+    ImageScrollArea *scrollArea;
     double scaleFactor;
     QColor gridColor;
     QPoint gridClickedPos;

@@ -11,6 +11,7 @@
 #include <QUndoStack>
 #include <QDesktopWidget>
 
+#include "imagescrollarea.h"
 #include "percentvalidator.h"
 
 class MoveGridCommand: public QUndoCommand
@@ -37,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     imageLabel(new ImageLabel),
-    scrollArea(new QScrollArea),
+    scrollArea(new ImageScrollArea),
     scaleFactor(1),
     gridColor(Qt::black),
     scaleTextEditedByUser(false)
@@ -56,6 +57,9 @@ MainWindow::MainWindow(QWidget *parent) :
     scrollArea->setVisible(false);
 
     ui->horizontalLayout->addWidget(scrollArea);
+
+    // Capture mouse-wheel events in the scroll area.
+    connect(scrollArea, SIGNAL(onCtrlWheelEvent(QWheelEvent*)), this, SLOT(onLabelWheelEvent(QWheelEvent*)));
 
     //setCentralWidget(scrollArea);
 

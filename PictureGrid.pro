@@ -17,11 +17,13 @@ SOURCES += main.cpp\
         mainwindow.cpp\
     imagelabel.cpp \
     percentvalidator.cpp \
-    clickablelabel.cpp
+    clickablelabel.cpp \
+    imagescrollarea.cpp
 
 HEADERS  += mainwindow.h\
     imagelabel.h \
-    clickablelabel.h
+    clickablelabel.h \
+    imagescrollarea.h
 
 FORMS    += mainwindow.ui
 
