@@ -12,6 +12,7 @@
 #include <QDesktopWidget>
 
 #include "imagescrollarea.h"
+#include "helpwindow.h"
 #include "percentvalidator.h"
 
 class MoveGridCommand: public QUndoCommand
@@ -41,7 +42,8 @@ MainWindow::MainWindow(QWidget *parent) :
     scrollArea(new ImageScrollArea),
     scaleFactor(1),
     gridColor(Qt::black),
-    scaleTextEditedByUser(false)
+    scaleTextEditedByUser(false),
+    helpWindow(nullptr)
 {
     ui->setupUi(this);
 
@@ -699,4 +701,14 @@ void MainWindow::on_actionCenterGrid_triggered()
 void MainWindow::onLabelOpenClick()
 {
     open();
+}
+
+void MainWindow::on_actionHelpContents_triggered()
+{
+    if (!helpWindow)
+    {
+        helpWindow = new HelpWindow(this);
+    }
+
+    helpWindow->show();
 }

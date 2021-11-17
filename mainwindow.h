@@ -20,6 +20,8 @@ QT_END_NAMESPACE
 
 #include "imagelabel.h"
 
+class HelpWindow;
+
 namespace Ui {
 class MainWindow;
 }
@@ -121,6 +123,8 @@ private:
     QComboBox *sceneScaleCombo;
     bool scaleTextEditedByUser;
 
+    HelpWindow *helpWindow;
+
 private slots:
     void onLabelMousePress(QMouseEvent *ev);
     void onLabelMouseMove(QMouseEvent *ev);
@@ -131,6 +135,7 @@ private slots:
     void offsetUpdated(QPoint offset);
     void on_actionCenterGrid_triggered();
     void onLabelOpenClick();
+    void on_actionHelpContents_triggered();
 };
 
 #endif // MAINWINDOW_H

@@ -18,14 +18,17 @@ SOURCES += main.cpp\
     imagelabel.cpp \
     percentvalidator.cpp \
     clickablelabel.cpp \
-    imagescrollarea.cpp
+    imagescrollarea.cpp \
+    helpwindow.cpp
 
 HEADERS  += mainwindow.h\
     imagelabel.h \
     clickablelabel.h \
-    imagescrollarea.h
+    imagescrollarea.h \
+    helpwindow.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    helpwindow.ui
 
 RESOURCES += \
     resources.qrc

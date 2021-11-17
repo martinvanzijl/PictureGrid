@@ -11,5 +11,6 @@
         <file>images/zoom-to-fit.svg</file>
         <file>images/center-grid.svg</file>
         <file>images/app-icon.png</file>
+        <file>html/manual.html</file>
     </qresource>
 </RCC>
