@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=PictureGrid
+Comment=Add a grid to a picture
+Exec=PictureGrid
+Icon=PictureGrid
+Categories=Graphics;2DGraphics;
+X-AppImage-Version=2.0
