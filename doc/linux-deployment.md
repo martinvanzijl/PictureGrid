@@ -12,7 +12,7 @@ To create the App Image file for Linux, do the following:
 
 	```sudo apt install patchelf```
 
-1. Download the App Image for the "appimagetool" software. You can get this from GitHub. Put the image in an executable directory, and make the file executable:
+1. Download the App Image for the "appimagetool" software. You can get this from GitHub [here](https://appimage.github.io/appimagetool/). Put the image in an executable directory, and make the file executable:
 
 	```chmod u+x appimagetool```
 
