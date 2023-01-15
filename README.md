@@ -6,6 +6,10 @@ PictureGrid lets you add a grid to a picture. This is aimed at artists, to save 
 
 There is other software that also can add a grid to a picture, such as GIMP. However, I hope to provide an interface as simple as possible for this task with PictureGrid.
 
+## Downloads
+
+See the [releases page](https://github.com/martinvanzijl/PictureGrid/releases) to download the program for Windows or Linux.
+
 ## Contributing Code
 This program is made with Qt Creator using Qt 5. I have not tested it with Qt 6 yet.
 
